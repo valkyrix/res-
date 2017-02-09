@@ -212,13 +212,13 @@ RUN luarocks install nn && \
 
 
 # Set up notebook config
-RUN cp /res-/jupyter_notebook_config.py /root/.jupyter/
+RUN cp /res-/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
 # Jupyter has issues with being run directly: https://github.com/ipython/ipython/issues/7062
-RUN cp /res-/run_jupyter.sh /root/
+RUN cp /res-/run_jupyter.sh /root/run_jupyter.sh
 
-# Expose Ports for TensorBoard (6006), Ipython (8888)
-EXPOSE 6006 8888
+# Expose Ports for TensorBoard (6006), Ipython (8888), Metasploit (443)
+EXPOSE 6006 8888 443
 
 # Get Metasploit
 WORKDIR /opt
@@ -248,7 +248,7 @@ RUN ln -s /opt/msf/msf* /usr/local/bin
 # Install PosgreSQL
 RUN /etc/init.d/postgresql start && su postgres -c "psql -f /res-/db.sql"
 USER root
-RUN cp '/res-/conf/database.yml' /opt/msf/config/
+RUN cp '/res-/conf/database.yml' /opt/msf/config/database.yml
 
 # tmux configuration file
 RUN cp '/res-/conf/tmux.conf' /root/.tmux.conf
