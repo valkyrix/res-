@@ -64,6 +64,7 @@ RUN apt-get install -y \
 		sysv-rc \
 		vim \
 		nmap \
+		&& \
 	
 	apt-get clean && \
 	apt-get autoremove && \
