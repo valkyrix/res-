@@ -212,7 +212,8 @@ RUN luarocks install nn && \
 
 
 # Set up notebook config
-RUN cp /res-/jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
+RUN jupyter notebook --generate-config
+RUN cp /res-/jupyter_notebook_config.py ~/.jupyter/jupyter_notebook_config.py
 
 # Jupyter has issues with being run directly: https://github.com/ipython/ipython/issues/7062
 RUN cp /res-/run_jupyter.sh /root/run_jupyter.sh
@@ -246,7 +247,10 @@ RUN for i in `ls /opt/msf/tools/*/*`; do ln -s $i /usr/local/bin/; done
 RUN ln -s /opt/msf/msf* /usr/local/bin
 
 # Install PosgreSQL
-RUN /etc/init.d/postgresql start && su postgres -c "psql -f /res-/db.sql"
+RUN /etc/init.d/postgresql start && sleep 100 && su postgres -c "psql -f /res-/scripts/db.sql"
+# Allow remote connections to the database.
+RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 USER root
 RUN cp '/res-/conf/database.yml' /opt/msf/config/database.yml
 
