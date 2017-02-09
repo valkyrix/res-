@@ -254,6 +254,11 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 USER root
 RUN cp '/res-/conf/database.yml' /opt/msf/config/database.yml
 
+#metasploit msgrpc module
+RUN rm -rf msfrpc && git clone git://github.com/SpiderLabs/msfrpc.git msfrpc
+WORKDIR msfrpc/python-msfrpc/
+RUN python setup.py install
+
 # tmux configuration file
 RUN cp '/res-/conf/tmux.conf' /root/.tmux.conf
 # startup script
